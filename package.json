@@ -1,0 +1,23 @@
+{
+  "name": "envy-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CactusKing101/Envy-Bot.git"
+  },
+  "author": "CatusKing101",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CactusKing101/Envy-Bot/issues"
+  },
+  "homepage": "https://github.com/CactusKing101/Envy-Bot#readme"
+}
