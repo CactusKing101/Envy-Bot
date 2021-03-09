@@ -25,7 +25,9 @@ client.once('ready', async () => {
         body += data;
       });
       response.on("end", function() {
-
+        if (args && JSON.parse(body).player != null) {
+          let data = JSON.parse(body);
+        }
       });
       request.on('error', error => {
         console.error(error);
@@ -62,7 +64,7 @@ client.on('message', msg => {
       })
       response.on("end", function() {
         if (args && JSON.parse(body).player != null) {
-          uuid = JSON.parse(body).player.uuid;
+          let data = JSON.parse(body);
           var player = false;
 
           options = {
