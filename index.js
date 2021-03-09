@@ -9,6 +9,31 @@ const key = config.hyp_api_key;
 
 client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
+  function checkPartGames() {
+    const https = require("https");
+
+    var options = {
+      hostname: "api.hypixel.net",
+      path: `/player?key=${key}&name=`,
+      method: "GET"
+    }
+
+    const request = https.request(options, response => {
+      console.log(`statusCode: ${response.statusCode}`);
+      body = "";
+      response.on("data", function(data) {
+        body += data;
+      });
+      response.on("end", function() {
+
+      });
+      request.on('error', error => {
+        console.error(error);
+      });
+      request.end();
+    });
+  }
+  setInterval(checkPartGames, (60 * 1000))
 })
 
 client.on('message', msg => {
@@ -23,14 +48,11 @@ client.on('message', msg => {
   if (command == 'gexp') {
     const https = require("https");
 
-    var uuid = "";
     var options = {
       hostname: "api.hypixel.net",
       path: `/player?key=${key}&name=${args[0]}`,
       method: "GET"
     }
-    var embed = new Discord.MessageEmbed();
-    var goOn = true;
 
     const request = https.request(options, response => {
       console.log(`statusCode: ${response.statusCode}`);
@@ -41,7 +63,6 @@ client.on('message', msg => {
       response.on("end", function() {
         if (args && JSON.parse(body).player != null) {
           uuid = JSON.parse(body).player.uuid;
-          if (!goOn) return msg.channel.send(embed);
           var player = false;
 
           options = {
@@ -63,19 +84,23 @@ client.on('message', msg => {
                     if (JSON.parse(body).guild.members[i].expHistory[args[1]] != null) {
                       embed.addField(`${JSON.parse(body).guild.members[i].expHistory[args[1]]} is ${args[0]}'s gexp for ${args[1]}`);
                       embed.setColor('#32FF00');
+                      return msg.channel.send(embed);
                     } else {
                       embed.addField(`Can not find information for the date given`);
                       embed.setColor('#FF0000');
+                      return msg.channel.send(embed);
                     }
                   }
                 }
                 if (!player) {
                   embed.addField(`${args[0]} is not in the guild`);
                   embed.setColor('#FF0000');
+                  return msg.channel.send(embed);
                 }
               } else {
                 embed.addField("Could not retrieve stats");
                 embed.setColor('#FF0000');
+                return msg.channel.send(embed);
               }
             })
             msg.channel.send(embed)
@@ -87,8 +112,7 @@ client.on('message', msg => {
         } else {
           embed.addField("Player doesn not exsist");
           embed.setColor('#FF0000');
-          goOn = false;
-        }
+          return msg.channel.send(embed)        }
       })
     })
     request.on('error', error => {
